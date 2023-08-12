@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Article</title>
+</head>
+<body>
+    <h2>Add Article</h2>
+    <form id="addArticleForm" action="/add_article" method="post">
+        <label for="articleName">Article Name:</label>
+        <input type="text" id="articleName" name="name" required>
+        <label for="articleDescription">Article Description:</label>
+        <textarea id="articleDescription" name="description" rows="4" required></textarea>
+        <input type="hidden" name="barcodeData" id="barcodeData" value="{{ barcode_data }}">
+        <input type="hidden" name="barcodeType" id="barcodeType" value="{{ barcode_type }}">
+        <button id = 'submit'>Add</button>
+    </form>
+    <script src="..\static\script.js"></script>
+</body>
+</html>

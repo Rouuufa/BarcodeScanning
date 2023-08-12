@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Barcode/QR code Scanner</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='CSS.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script src="{{ url_for('static', filename='scannerjava.js') }}"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Barcode/QR Scanner</h1>
+        <div class="upload-container">
+            <input type="file" id="imageInput" accept="image/*">
+            <label for="imageInput"><i class="fas fa-upload"></i> Choose Image</label>
+        </div>
+        <h3>ArticleName :</h3>
+        <div id="articleName"> </div>
+        <h3>ArticleDescription :</h3>
+        <div id="articleDescription"> </div>
+
+        <button class="scan-btn" onclick="processImage()">Scan Barcode</button>
+        <div class="result-container">
+            <div class="scanner-line"></div>
+            <p id="barcodeData"></p>
+        </div>
+    </div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Add Article</h2>
+            <form id="articleFormModal">
+                <label for="articleNameModal">Article Name:</label>
+                <input type="text" id="articleNameModal" required>
+                <label for="articleDescriptionModal">Article Description:</label>
+                <textarea id="articleDescriptionModal" rows="4" required></textarea>
+                <button type="submit" onclick="submitArticle(event)">Add</button>
+            </form>
+        </div>
+    </div>
+    <div id="addArticleModal" class="modal">
+        <div class="modal-content" id="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Add Article</h2>
+            <form id="articleForm">
+                <label for="articleName">Article Name:</label>
+                <input type="text" id="articleName" required>
+                <label for="articleDescription">Article Description:</label>
+                <textarea id="articleDescription" rows="4" required></textarea>
+                <button type="submit" onclick="submitArticle(event)">Add</button>
+            </form>
+        </div>
+    </div>
+    <input type="hidden" id="barcodeData" >
+    <input type="hidden" id="barcodeType" >
+    <button class="list-btn" onclick="listArticles()">List All Articles</button>
+    <div id="articleList" class="article-list"></div>
+    <button class="add-manual-btn" onclick="openManualAddArticleModal()">Add Article Manually</button>
+
+<div id="manualAddArticleModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeManualAddArticleModal()">&times;</span>
+        <h2>Add Article Manually</h2>
+        <form id="manualAddArticleForm">
+            <label for="manualArticleName">Article Name:</label>
+            <input type="text" id="manualArticleName" required>
+            <label for="manualArticleDescription">Article Description:</label>
+            <textarea id="manualArticleDescription" rows="4" required></textarea>
+            <label for="manualBarcodeData">Barcode Data:</label>
+            <input type="text" id="manualBarcodeData" required>
+            <label for="manualBarcodeType">Barcode Type:</label>
+            <input type="text" id="manualBarcodeType" required>
+            <button type="submit" onclick="submitManualArticle(event)">Add</button>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>
