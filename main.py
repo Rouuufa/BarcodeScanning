@@ -114,7 +114,7 @@ def list_articles():
     cursor.execute("SELECT * FROM article")
     articles = cursor.fetchall()
     article_list = []
-    
+
     for article in articles:
         article_data = {
             "id": article[0],
@@ -124,7 +124,7 @@ def list_articles():
             "barcode_type": article[4]
         }
         article_list.append(article_data)
-    
+
     return jsonify(article_list)
 
 
