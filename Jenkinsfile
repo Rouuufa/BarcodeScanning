@@ -47,7 +47,12 @@ pipeline {
                 }
             }
         }
+    }
     post {
+        always {
+            archiveArtifacts artifacts: '**/*.log', allowEmptyArchive: true
+        }
+
         success {
             script {
                 mail to: "abderraoufkraiem@gmail.com", subject: "Jenkins Build Successful: ${env.JOB_NAME}", body: "Jenkins build successful: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'\n\nCheck console output at ${env.BUILD_URL}"
