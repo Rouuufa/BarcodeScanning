@@ -26,7 +26,6 @@ pipeline {
                         sh 'python3 -m venv venv'
                         sh 'venv/bin/pip install --upgrade pip'
                         sh 'venv/bin/pip install -r requirements.txt'
-                        sh 'venv/bin/pip install unittest'
                         sh 'venv/bin/pip install pytest'
                         sh 'venv/bin/pip install flake8'
                         echo "Virtual environment and dependencies set up successfully."
