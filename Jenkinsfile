@@ -9,8 +9,8 @@ pipeline {
     stages {
         stage('Clone') {
             steps {
-                // Clone the repository
-                git 'https://github.com/Rouuufa/BarcodeScanning.git'
+                // Clone the repository and specify the branch
+                git branch: 'main', url: 'https://github.com/Rouuufa/BarcodeScanning.git'
             }
         }
         stage('Setup') {
@@ -18,7 +18,7 @@ pipeline {
                 // Set up Python virtual environment and install dependencies
                 sh 'python3 -m venv venv'
                 sh 'venv/bin/pip install --upgrade pip'
-                sh 'venv/bin/pip install -r requirement.txt'
+                sh 'venv/bin/pip install -r requirements.txt'
             }
         }
         stage('Lint') {
