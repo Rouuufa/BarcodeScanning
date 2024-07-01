@@ -13,6 +13,7 @@ db = mysql.connector.connect(
 cursor = db.cursor()
 
 class BarcodeScanner:
+    
     def __init__(self, image_path):
         self.image_path = image_path
 
@@ -43,9 +44,11 @@ class BarcodeScanner:
         else:
             return None
 
+
 @app.route('/')
 def index():
     return render_template('HTML.html')
+
 
 @app.route('/process_image', methods=['POST'])
 def process_image():
@@ -67,9 +70,9 @@ def process_image():
             return jsonify({"name": article_name, "description": article_description})
         else:
             return jsonify({"barcode_data": barcode_data, "barcode_type": barcode_type})
-
     else:
         return jsonify({"error": "Barcode not detected"})
+
 
 @app.route('/add_article', methods=['POST'])
 def add_article():
@@ -83,6 +86,7 @@ def add_article():
     db.commit()
 
     return jsonify({"message": "Article added successfully"})
+
 
 @app.route('/list_articles', methods=['GET'])
 def list_articles():
@@ -101,6 +105,7 @@ def list_articles():
         article_list.append(article_data)
     
     return jsonify(article_list)
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
