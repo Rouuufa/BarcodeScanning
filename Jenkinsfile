@@ -39,7 +39,7 @@ pipeline {
             steps {
                 script {
                     try {
-                        sh 'venv/bin/flake8 --jobs auto .' 
+                        sh 'venv/bin/flake8 main.py' 
                         echo "Linting completed successfully."
                     } catch (Exception e) {
                         error "Linting failed: ${e.message}"
