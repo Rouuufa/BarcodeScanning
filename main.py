@@ -78,7 +78,9 @@ def process_image():
         barcode_data = result['barcode_data']
         barcode_type = result['barcode_type']
         cursor.execute(
-         "SELECT * FROM article WHERE barcode_data = %s AND barcode_type = %s",
+            "SELECT * FROM article"
+            "WHERE barcode_data = %s AND"
+            "barcode_type = %s",
          (barcode_data, barcode_type))
         article = cursor.fetchone()
 
@@ -102,8 +104,11 @@ def add_article():
     barcode_data = data['barcodeData']
     barcode_type = data['barcodeType']
     cursor.execute(
-        "INSERT INTO article (name,description, barcode_data, barcode_type) VALUES (%s, %s, %s, %s)",
-        (article_name, article_description, barcode_data, barcode_type))
+        "INSERT INTO article"
+        "(name,description, barcode_data, barcode_type)"
+        "VALUES (%s, %s, %s, %s)",
+        (article_name, article_description,
+         barcode_data, barcode_type))
     db.commit()
 
     return jsonify({"message": "Article added successfully"})
