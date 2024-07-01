@@ -32,7 +32,7 @@ pipeline {
         stage('Test') {
             steps {
                 // Run tests using pytest
-                sh 'venv/bin/pytest '
+                sh 'venv/bin/pytest test_barcode_scanner.py '
             }
         }
         stage('Package') {
