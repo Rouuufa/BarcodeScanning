@@ -9,45 +9,82 @@ pipeline {
     stages {
         stage('Clone') {
             steps {
-                // Clone the repository and specify the branch
-                git branch: 'main', url: 'https://github.com/Rouuufa/BarcodeScanning.git'
+                script {
+                    try {
+                        git branch: 'main', url: 'https://github.com/Rouuufa/BarcodeScanning.git'
+                        echo "Repository cloned successfully."
+                    } catch (Exception e) {
+                        error "Failed to clone repository: ${e.message}"
+                    }
+                }
             }
         }
         stage('Setup') {
             steps {
-                // Set up Python virtual environment and install dependencies
-                sh 'python3 -m venv venv'
-                sh 'venv/bin/pip install --upgrade pip'
-                sh 'venv/bin/pip install -r requirements.txt'
-                sh 'venv/bin/pip install pylint'
-                sh 'venv/bin/pip install flake8'
+                script {
+                    try {
+                        sh 'python3 -m venv venv'
+                        sh 'venv/bin/pip install --upgrade pip'
+                        sh 'venv/bin/pip install -r requirements.txt'
+                        sh 'venv/bin/pip install unittest'
+                        sh 'venv/bin/pip install pytest'
+                        sh 'venv/bin/pip install flake8'
+                        echo "Virtual environment and dependencies set up successfully."
+                    } catch (Exception e) {
+                        error "Failed to set up virtual environment: ${e.message}"
+                    }
+                }
             }
         }
         stage('Lint') {
             steps {
-                // Lint the codebase using flake8
-                sh 'venv/bin/flake8 .'
+                script {
+                    try {
+                        sh 'venv/bin/flake8 .'
+                        echo "Linting completed successfully."
+                    } catch (Exception e) {
+                        error "Linting failed: ${e.message}"
+                    }
+                }
             }
         }
         stage('Test') {
             steps {
-                // Run tests using pytest and generate JUnit XML report
-                sh 'venv/bin/pytest test_barcode_scanner.py --junitxml=reports/test_results.xml'
+                script {
+                    try {
+                        sh 'mkdir -p reports'
+                        sh 'venv/bin/python test_barcode_scanner.py'
+                        echo "Tests executed successfully."
+                    } catch (Exception e) {
+                        error "Testing failed: ${e.message}"
+                    }
+                }
             }
         }
         stage('Package') {
             steps {
-                // Package the application, if applicable
-                // For example, create a distribution package
-                sh 'venv/bin/python setup.py sdist'
+                script {
+                    try {
+                        sh 'venv/bin/python setup.py sdist'
+                        echo "Packaging completed successfully."
+                    } catch (Exception e) {
+                        error "Packaging failed: ${e.message}"
+                    }
+                }
             }
         }
     }
     post {
         always {
-            // Archive logs and test results
-            archiveArtifacts artifacts: '**/*.log', allowEmptyArchive: true
-            junit 'reports/test_results.xml'
+            script {
+                try {
+                    archiveArtifacts artifacts: '**/*.log', allowEmptyArchive: true
+                    junit 'reports/test_results.xml'
+                    echo "Post actions completed successfully."
+                } catch (Exception e) {
+                    error "Post actions failed: ${e.message}"
+                }
+            }
         }
     }
 }
