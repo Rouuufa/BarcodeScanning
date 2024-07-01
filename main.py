@@ -81,7 +81,7 @@ def process_image():
             "SELECT * FROM article"
             "WHERE barcode_data = %s AND"
             "barcode_type = %s",
-         (barcode_data, barcode_type))
+            (barcode_data, barcode_type))
         article = cursor.fetchone()
 
         if article:
