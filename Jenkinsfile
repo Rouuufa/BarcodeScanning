@@ -19,20 +19,20 @@ pipeline {
                 sh 'python3 -m venv venv'
                 sh 'venv/bin/pip install --upgrade pip'
                 sh 'venv/bin/pip install -r requirements.txt'
-                sh 'venv/bin/pip install flake8'
+                sh 'venv/bin/pip install pylint'
                 sh 'venv/bin/pip install pytest'
             }
         }
         stage('Lint') {
             steps {
                 // Lint the codebase using flake8
-                sh 'venv/bin/flake8 .'
+                sh 'venv/bin/pylint .'
             }
         }
         stage('Test') {
             steps {
                 // Run tests using pytest
-                sh 'venv/bin/pytest'
+                sh 'venv/bin/pytest '
             }
         }
         stage('Package') {
