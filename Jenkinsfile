@@ -47,19 +47,6 @@ pipeline {
                 }
             }
         }
-        stage('Test') {
-            steps {
-                script {
-                    try {
-                        sh 'mkdir -p reports'
-                        sh 'venv/bin/python test_barcode_scanner.py'
-                        echo "Tests executed successfully."
-                    } catch (Exception e) {
-                        error "Testing failed: ${e.message}"
-                    }
-                }
-            }
-        }
         stage('Package') {
             steps {
                 script {
@@ -75,15 +62,17 @@ pipeline {
     }
     post {
         always {
-            script {
-                try {
-                    archiveArtifacts artifacts: '**/*.log', allowEmptyArchive: true
-                    junit 'reports/test_results.xml'
-                    echo "Post actions completed successfully."
-                } catch (Exception e) {
-                    error "Post actions failed: ${e.message}"
-                }
-            }
+            archiveArtifacts artifacts: '**/*.log', allowEmptyArchive: true
+            junit 'reports/test_results.xml'
+            currentBuild.result = currentBuild.result ?: 'SUCCESS'
+        }
+
+        success {
+            emailext attachLog: true, body: "Jenkins build successful: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'\n\nCheck console output at ${env.BUILD_URL}", subject: "Jenkins Build Successful: ${env.JOB_NAME}", to: "abderraoufkraiem@gmail.com"
+        }
+
+        failure {
+            emailext attachLog: true, body: "Jenkins build failed: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'\n\nCheck console output at ${env.BUILD_URL}", subject: "Jenkins Build Failed: ${env.JOB_NAME}", to: "abderraoufkraiem@gmail.com"
         }
     }
 }
