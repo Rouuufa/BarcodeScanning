@@ -12,8 +12,9 @@ db = mysql.connector.connect(
 )
 cursor = db.cursor()
 
+
 class BarcodeScanner:
-    
+
     def __init__(self, image_path):
         self.image_path = image_path
 
@@ -21,16 +22,31 @@ class BarcodeScanner:
         image = cv2.imread(self.image_path)
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         blurred = cv2.GaussianBlur(gray, (5, 5), 0)
-        thresholded = cv2.adaptiveThreshold(blurred, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 11, 2)
+        thresholded = cv2.adaptiveThreshold(blurred,
+                                            255,
+                                            cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
+                                            cv2.THRESH_BINARY, 
+                                            11, 
+                                            2)
         barcodes = pyzbar.decode(thresholded)
-        
+
         for barcode in barcodes:
             (x, y, w, h) = barcode.rect
-            cv2.rectangle(image, (x, y), (x + w, y + h), (0, 255, 0), 2)
+            cv2.rectangle(image,
+                          (x, y),
+                          (x + w, y + h),
+                          (0, 255, 0),
+                          2)
             barcode_data = barcode.data.decode("utf-8")
             barcode_type = barcode.type
             text = f"{barcode_data} ({barcode_type})"
-            cv2.putText(image, text, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+            cv2.putText(image,
+                        text,
+                        (x, y - 10),
+                        cv2.FONT_HERSHEY_SIMPLEX,
+                        0.5,
+                        (0, 255, 0),
+                        2)
             print("Barcode Type:", barcode_type)
             print("Barcode Data:", barcode_data)
             cv2.imshow("Image", image)
@@ -61,15 +77,19 @@ def process_image():
     if result:
         barcode_data = result['barcode_data']
         barcode_type = result['barcode_type']
-        cursor.execute("SELECT * FROM article WHERE barcode_data = %s AND barcode_type = %s", (barcode_data, barcode_type))
+        cursor.execute(
+            "SELECT * FROM article WHERE barcode_data = %s AND barcode_type = %s",
+                       (barcode_data, barcode_type))
         article = cursor.fetchone()
 
         if article:
             article_name = article[1]
             article_description = article[2]
-            return jsonify({"name": article_name, "description": article_description})
+            return jsonify({"name": article_name,
+                            "description": article_description})
         else:
-            return jsonify({"barcode_data": barcode_data, "barcode_type": barcode_type})
+            return jsonify({"barcode_data": barcode_data,
+                            "barcode_type": barcode_type})
     else:
         return jsonify({"error": "Barcode not detected"})
 
@@ -81,7 +101,8 @@ def add_article():
     article_description = data['description']
     barcode_data = data['barcodeData']
     barcode_type = data['barcodeType']
-    cursor.execute("INSERT INTO article (name, description, barcode_data, barcode_type) VALUES (%s, %s, %s, %s)",
+    cursor.execute(
+        "INSERT INTO article (name,description, barcode_data, barcode_type) VALUES (%s, %s, %s, %s)",
                    (article_name, article_description, barcode_data, barcode_type))
     db.commit()
 
