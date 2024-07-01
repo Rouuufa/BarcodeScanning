@@ -31,8 +31,8 @@ pipeline {
         }
         stage('Test') {
             steps {
-                // Run tests using pytest
-                sh 'venv/bin/pytest test_barcode_scanner.py '
+                // Run tests using pytest and generate JUnit XML report
+                sh 'venv/bin/pytest test_barcode_scanner.py --junitxml=reports/test_results.xml'
             }
         }
         stage('Package') {
@@ -47,7 +47,7 @@ pipeline {
         always {
             // Archive logs and test results
             archiveArtifacts artifacts: '**/*.log', allowEmptyArchive: true
-            junit 'reports/*.xml'
+            junit 'reports/test_results.xml'
         }
     }
 }
