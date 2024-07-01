@@ -47,28 +47,7 @@ pipeline {
                 }
             }
         }
-        stage('Package') {
-            steps {
-                script {
-                    try {
-                        sh 'venv/bin/python setup.py sdist'
-                        echo "Packaging completed successfully."
-                    } catch (Exception e) {
-                        error "Packaging failed: ${e.message}"
-                    }
-                }
-            }
-        }
-    }
     post {
-        always {
-            archiveArtifacts artifacts: '**/*.log', allowEmptyArchive: true
-            junit 'reports/test_results.xml'
-            script {
-                currentBuild.result = currentBuild.result ?: 'SUCCESS'
-            }
-        }
-
         success {
             script {
                 mail to: "abderraoufkraiem@gmail.com", subject: "Jenkins Build Successful: ${env.JOB_NAME}", body: "Jenkins build successful: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'\n\nCheck console output at ${env.BUILD_URL}"
