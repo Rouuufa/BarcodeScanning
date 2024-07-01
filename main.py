@@ -25,8 +25,8 @@ class BarcodeScanner:
         thresholded = cv2.adaptiveThreshold(blurred,
                                             255,
                                             cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
-                                            cv2.THRESH_BINARY, 
-                                            11, 
+                                            cv2.THRESH_BINARY,
+                                            11,
                                             2)
         barcodes = pyzbar.decode(thresholded)
 
@@ -78,8 +78,8 @@ def process_image():
         barcode_data = result['barcode_data']
         barcode_type = result['barcode_type']
         cursor.execute(
-            "SELECT * FROM article WHERE barcode_data = %s AND barcode_type = %s",
-                       (barcode_data, barcode_type))
+         "SELECT * FROM article WHERE barcode_data = %s AND barcode_type = %s",
+         (barcode_data, barcode_type))
         article = cursor.fetchone()
 
         if article:
@@ -103,7 +103,7 @@ def add_article():
     barcode_type = data['barcodeType']
     cursor.execute(
         "INSERT INTO article (name,description, barcode_data, barcode_type) VALUES (%s, %s, %s, %s)",
-                   (article_name, article_description, barcode_data, barcode_type))
+        (article_name, article_description, barcode_data, barcode_type))
     db.commit()
 
     return jsonify({"message": "Article added successfully"})
